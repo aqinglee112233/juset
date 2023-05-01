@@ -1,4 +1,5 @@
 import openai
+import os
 from flask import Flask, request, jsonify
 
 # 设置 OpenAI API 密钥
