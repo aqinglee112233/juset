@@ -1,11 +1,29 @@
-from flask import Flask
-import os
+import openai
+from flask import Flask, request, jsonify
 
+# 设置 OpenAI API 密钥
+openai.api_key = os.environ.get("YOUR_API_KEY")
+
+# 初始化 Flask 应用程序
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    return "Hello from Flask!"
+# 定义 Flask 路由
+@app.route('/', methods=['POST'])
+def generate_text():
+
+    # 获取生成文本的参数
+    prompt = request.values.get('prompt')
+    length = 500
+
+    # 使用 OpenAI API 生成文本
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=prompt,
+        max_tokens=length
+    )
+
+    # 返回生成的文本
+    return jsonify({'text': response['choices'][0]['text']})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT"))
