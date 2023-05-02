@@ -9,18 +9,18 @@ openai.api_key = os.environ.get("YOUR_API_KEY")
 app = Flask(__name__)
 
 # 定义 Flask 路由
-@app.route('/', methods=['POST'])
-def generate_text():
+@app.route('/<string:word>')
+def generate_text(word):
 
     # 获取生成文本的参数
-    prompt = request.values.get('prompt')
+    prompt = request.args.get(word)
     length = 500
 
     # 使用 OpenAI API 生成文本
     response = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
-        max_tokens=length
+        max_tokens=200
     )
 
     # 返回生成的文本
